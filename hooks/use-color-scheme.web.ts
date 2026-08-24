@@ -1,21 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useColorScheme as useRNColorScheme } from 'react-native';
-
 /**
- * To support static rendering, this value needs to be re-calculated on the client side for web
+ * Web color-scheme hook.
+ * Implemented here (not re-exported) to avoid a Metro platform resolve cycle:
+ * `use-color-scheme.web.ts` → `@/hooks/use-color-scheme` → back to `.web.ts`.
  */
-export function useColorScheme() {
-  const [hasHydrated, setHasHydrated] = useState(false);
+import { useColorScheme as useSystemColorScheme } from 'react-native';
 
-  useEffect(() => {
-    setHasHydrated(true);
-  }, []);
+import { usePreferencesStore } from '@/store/preferencesStore';
 
-  const colorScheme = useRNColorScheme();
+export function useColorScheme(): 'light' | 'dark' {
+  const preference = usePreferencesStore((state) => state.themePreference);
+  const system = useSystemColorScheme();
 
-  if (hasHydrated) {
-    return colorScheme;
+  if (preference === 'light' || preference === 'dark') {
+    return preference;
   }
 
-  return 'light';
+  return system === 'dark' ? 'dark' : 'light';
 }

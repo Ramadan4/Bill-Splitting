@@ -1,0 +1,12 @@
+---
+description: Keep files small; separate UI, hooks, and business logic
+alwaysApply: true
+---
+
+# File size & separation of concerns
+
+- **Keep files small.** Split when a screen, hook, or util grows past a reasonable length (roughly ~150–200 lines). Prefer more small files over one large file.
+- **UI screens/components (`*.tsx`):** Presentational only — JSX, light local UI state, calling hooks. No heavy business math, no fat inline data transforms.
+- **Custom hooks (`hooks/use[Feature].ts` or feature-local `use*.ts`):** Stateful logic, side effects, store wiring, derived UI state.
+- **Logic (`utils/`, later `services/`):** Pure helpers, calculations, formatting. No React imports.
+- **Early returns** over nested `if/else`. **No `any`** — strict TypeScript. **DRY** — extract repeated UI into shared components.

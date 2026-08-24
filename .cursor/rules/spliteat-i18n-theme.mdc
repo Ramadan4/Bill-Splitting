@@ -1,0 +1,14 @@
+---
+description: SplitEat i18n, RTL/LTR, and light/dark theme requirements
+alwaysApply: true
+---
+
+# SplitEat: locale, direction, themes
+
+When building or changing SplitEat screens and components:
+
+1. **Languages:** Support English (`en`) and Arabic (`ar`). Prefer translation keys over hard-coded user-facing strings once i18n is in place.
+2. **RTL / LTR:** Arabic = RTL, English = LTR. Layouts must work in both directions (flex, icons, navigation back affordances).
+3. **Themes:** Support light and dark. Use semantic theme colors; do not assume white backgrounds only.
+4. Keep calculation logic in `utils/` free of UI strings and theme concerns.
+5. Introduce i18n + theme plumbing **before** polishing final UI so feature steps stay reusable.

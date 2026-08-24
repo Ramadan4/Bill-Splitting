@@ -1,15 +1,18 @@
 {
   "expo": {
-    "name": "split",
-    "slug": "split",
+    "name": "SplitEat",
+    "slug": "spliteat",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "split",
+    "scheme": "spliteat",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": ["whatsapp", "whatsapp-business"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,6 +22,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
+      "softwareKeyboardLayoutMode": "resize",
       "predictiveBackGestureEnabled": false
     },
     "web": {
@@ -36,6 +40,23 @@
           "backgroundColor": "#ffffff",
           "dark": {
             "backgroundColor": "#000000"
+          }
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow SplitEat to access your photos so you can attach a receipt as a visual reference.",
+          "cameraPermission": "Allow SplitEat to use the camera so you can photograph a restaurant receipt.",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-localization",
+        {
+          "supportedLocales": {
+            "ios": ["en", "ar"],
+            "android": ["en", "ar"]
           }
         }
       ]

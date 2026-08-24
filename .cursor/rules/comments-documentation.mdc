@@ -1,0 +1,12 @@
+---
+description: Mandatory comments, JSDoc, and why-not-what documentation
+alwaysApply: true
+---
+
+# Comments & code documentation
+
+- **JSDoc** above exported functions, hooks, and components: what it does, params/props, return value.
+- **Inline comments** for non-obvious steps inside hooks, utils, and non-trivial UI (especially money/assignment logic).
+- Explain **why** (edge cases, rounding, RTL, tax rules), not only what the next line does.
+- Skip noise comments that only restate the code (`// set loading to true`).
+- Prefer Arabic or English comments consistently within a file; English JSDoc is fine for APIs.

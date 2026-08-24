@@ -1,0 +1,51 @@
+---
+description: Feature modules vs shared components directory layout
+alwaysApply: true
+---
+
+# Directory & component structure
+
+- **Routing:** expo-router owns navigation. `app/` is the router — thin re-exports only. Screen composition lives in `screens/[feature]/`. There is no React Navigation `navigation/` folder.
+- **Atomic UI:** Generic, stateless design-system pieces (`Button`, `Input`, `Card`, `Modal`, `Badge`, `Skeleton`, Screen, Flow shell) → `components/ui/` only.
+- **Feature UI:** Domain-specific composites live in `components/features/[feature]/`. Never dump feature-only widgets into `components/ui`.
+- **Screens:** `screens/` composes feature UI + hooks. `app/*.tsx` re-exports the matching screen.
+- **Hooks:** Feature hooks in `hooks/[feature]/` (e.g. `hooks/bill/useStartBillFlow.ts`). Shared: `useTheme`, `useResponsive`, `useHaptics`.
+- **Logic:** Pure helpers in `utils/` (`formatters.ts` / `validators.ts` barrels); state in `store/`; external I/O in `services/`; models in `types/`.
+- **SRP:** One clear responsibility per file (one route, one hook, one util concern).
+- Current SplitEat layout:
+  - `app/` — thin expo-router routes + `_layout.tsx` stacks
+  - `screens/` — screen composition (home, bill, history, groups)
+  - `components/ui/` — atomic design system (`Button`, `Input`, `Card`, `Modal`, `Badge`, `Skeleton`, `Screen`, `PressableCard`, `EmptyState`, `ErrorBanner`, `ActionDock`, `TextField`, `FlowScreen`, `KeyboardScreen`)
+  - `components/features/bill` — bill feature UI
+  - `components/features/items` — items feature UI (form/list)
+  - `components/features/people` — people feature UI (form/list)
+  - `components/features/assign` — assign feature UI (per-item quantity cards)
+  - `components/features/receipt` — receipt capture/preview (no OCR)
+  - `components/features/charges` — tax/service/delivery inputs
+  - `components/features/summary` — final bill breakdown
+  - `components/features/history` + `components/features/groups` + `components/features/settings`
+  - `hooks/[feature]/` — feature hooks (bill, items, people, assign, charges, summary, receipt, history, groups, share)
+  - `services/storage/` — the only place that touches AsyncStorage (`readJson` / `writeJson` / `StorageKeys`)
+  - `store/` — Zustand stores (`index.ts` barrel, no Redux slices)
+  - `constants/colors.ts` + `constants/theme.ts` + `constants/layout.ts`
+  - `utils/models/` — entity factories
+  - `utils/items/` + `utils/people/` + `utils/assign/` + `utils/charges/` + `utils/receipt/` — helpers
+  - `utils/calculations/` — pure money engine
+  - `types/` — shared models
+
+# Persistence
+
+- Stores never import AsyncStorage. Go through `@/services/storage` and add the key to `StorageKeys`.
+- `readJson` returns `null` on missing or corrupt data — callers fall back to defaults.
+- `writeJson` lets errors propagate so save-failure UI (e.g. `errors.groupSaveFailed`) still fires.
+
+# Design system
+
+- **Tokens only.** Colors come from `constants/colors.ts` via `useThemeColor` / `useTheme`; spacing, radii, `TOUCH_TARGET`, `PRESS_SCALE` and `depth()` come from `constants/layout.ts`. No raw hex or magic pixel values in components.
+- **Eye-care surfaces:** never pure `#000000` / `#FFFFFF` on a primary surface.
+- **Atoms** live in `components/ui`: `Button`, `Input`, `Card`, `Modal`, `Badge`, `Skeleton`/`SkeletonList`, `EmptyState`, `ErrorBanner`, `ActionDock`, `PrimaryButton`, `SecondaryButton`, `TextField`. Reuse before adding new UI.
+- **Thumb zone:** a screen's primary CTA belongs in `ActionDock` at the bottom, not inline at the top.
+- **Interaction:** every pressable needs a ≥44dp target, a `PRESS_SCALE` squeeze, and haptics via `useHaptics`.
+- **States:** lists render `SkeletonList` while hydrating, `EmptyState` when empty, and `ErrorBanner` for non-blocking errors — never a full-screen spinner.
+- **Truncation:** give text a `numberOfLines` wherever user-supplied names or amounts can overflow.
+- **Responsive:** size decisions come from `useResponsive()` (`isCompact` / `isTablet` / `isLandscape`), never from hard-coded device checks. `Screen` already caps content width on tablets, so most screens need no extra work.

@@ -1,21 +1,20 @@
 /**
- * Learn more about light and dark modes:
- * https://docs.expo.dev/guides/color-schemes/
+ * Resolves a semantic theme color for the active light/dark scheme.
  */
-
-import { Colors } from '@/constants/theme';
+import { Colors, type ThemeColorName } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
-  colorName: keyof typeof Colors.light & keyof typeof Colors.dark
-) {
+  colorName: ThemeColorName,
+): string {
   const theme = useColorScheme() ?? 'light';
   const colorFromProps = props[theme];
 
+  // Allow one-off overrides when a screen needs a special color.
   if (colorFromProps) {
     return colorFromProps;
-  } else {
-    return Colors[theme][colorName];
   }
+
+  return Colors[theme][colorName];
 }
