@@ -2,19 +2,22 @@ import { ScrollView, StyleSheet, Text } from 'react-native';
 
 import { ReceiptCaptureActions } from '@/components/features/receipt/ReceiptCaptureActions';
 import { ReceiptPreview } from '@/components/features/receipt/ReceiptPreview';
+import { ErrorBanner } from '@/components/ui/ErrorBanner';
 import { Screen } from '@/components/ui/Screen';
+import { Spacing } from '@/constants/layout';
 import { useReceiptCapture } from '@/hooks/receipt/useReceiptCapture';
 import { useI18n } from '@/hooks/use-i18n';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 /**
- * Receipt capture UI: take/select photo, preview, then continue to manual items.
+ * Receipt capture UI: take/select photo, run OCR, then continue to review items.
  */
 export function ReceiptCaptureEditor() {
   const {
     receiptImageUri,
     error,
     isBusy,
+    extractedCount,
     takePhoto,
     chooseFromLibrary,
     clearPhoto,
@@ -24,10 +27,10 @@ export function ReceiptCaptureEditor() {
   const { t } = useI18n();
   const titleColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'muted');
-  const dangerColor = useThemeColor({}, 'danger');
+  const successColor = useThemeColor({}, 'success');
 
   return (
-    <Screen style={styles.screen}>
+    <Screen>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <Text style={[styles.title, { color: titleColor }]}>{t('receipt.title')}</Text>
         <Text style={[styles.description, { color: mutedColor }]}>
@@ -35,9 +38,18 @@ export function ReceiptCaptureEditor() {
         </Text>
 
         {receiptImageUri ? <ReceiptPreview uri={receiptImageUri} /> : null}
-        {error ? (
-          <Text style={[styles.error, { color: dangerColor }]}>{t(error)}</Text>
+
+        {isBusy ? (
+          <Text style={[styles.status, { color: mutedColor }]}>{t('receipt.extracting')}</Text>
         ) : null}
+
+        {extractedCount > 0 ? (
+          <Text style={[styles.status, { color: successColor }]}>
+            {t('receipt.extractedCount', { count: extractedCount })}
+          </Text>
+        ) : null}
+
+        <ErrorBanner message={error ? t(error) : null} />
 
         <ReceiptCaptureActions
           hasPhoto={Boolean(receiptImageUri)}
@@ -53,11 +65,8 @@ export function ReceiptCaptureEditor() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    paddingBottom: 16,
-  },
   content: {
-    gap: 14,
+    gap: Spacing.md,
     flexGrow: 1,
   },
   title: {
@@ -68,7 +77,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 21,
   },
-  error: {
-    fontSize: 13,
+  status: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

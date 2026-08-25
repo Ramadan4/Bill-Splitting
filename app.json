@@ -46,8 +46,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow SplitEat to access your photos so you can attach a receipt as a visual reference.",
-          "cameraPermission": "Allow SplitEat to use the camera so you can photograph a restaurant receipt.",
+          "photosPermission": "Allow SplitEat to access your photos so you can scan a receipt and extract items.",
+          "cameraPermission": "Allow SplitEat to use the camera so you can photograph a restaurant receipt for item extraction.",
           "microphonePermission": false
         }
       ],

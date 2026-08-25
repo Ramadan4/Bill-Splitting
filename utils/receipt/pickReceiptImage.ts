@@ -1,6 +1,6 @@
 /**
  * Receipt image picking helpers (camera / gallery).
- * No OCR here — URI is stored as a visual reference only (OCR-ready later).
+ * No OCR here — picking only. Recognition lives in recognizeReceiptText.ts.
  */
 import * as ImagePicker from 'expo-image-picker';
 

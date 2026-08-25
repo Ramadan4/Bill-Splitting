@@ -57,27 +57,29 @@ export const en = {
   inputMethod: {
     title: 'Choose Input Method',
     description:
-      'Manual entry now. Receipt photo is a visual reference only (no OCR yet).',
+      'Take a photo or pick a receipt — we extract items automatically for you to review.',
     manualTitle: 'Manual Entry',
     manualBody: 'Type item name, price, and quantity.',
     receiptTitle: 'Receipt Photo',
-    receiptBody: 'Attach a photo as reference, then enter items manually.',
+    receiptBody: 'Scan a receipt photo and review the extracted items.',
   },
   receipt: {
     title: 'Receipt Photo',
     description:
-      'Attach a receipt as a visual reference while you enter items. OCR is not enabled yet — the calculation engine stays unchanged.',
+      'Take or choose a receipt photo. SplitEat reads the text and fills items — always review prices before continuing.',
     takePhoto: 'Take photo',
     chooseGallery: 'Choose from gallery',
     removePhoto: 'Remove photo',
     continueItems: 'Continue to Items',
     skipManual: 'Skip — enter items manually',
     previewA11y: 'Receipt photo preview',
+    extracting: 'Reading receipt…',
+    extractedCount: 'Found {{count}} item(s). Review them on the next screen.',
   },
   items: {
     title: 'Add / Review Items',
     hintManual: 'Enter each item name, unit price, and quantity.',
-    hintReceipt: 'Receipt photo is reference only for now — enter items manually.',
+    hintReceipt: 'Review items from the receipt. Edit or add anything OCR missed.',
     addItem: 'Add item',
     listTitle: 'Items ({{count}})',
     subtotal: 'Subtotal {{amount}}',
@@ -189,6 +191,13 @@ export const en = {
     receiptPermission:
       'Permission denied. Enable camera/photos access in system settings.',
     receiptOpenFailed: 'Could not open the camera or photo library.',
+    ocrApiKeyMissing:
+      'Add EXPO_PUBLIC_OCR_SPACE_API_KEY to your .env (free key from ocr.space), then restart Expo.',
+    ocrFailed: 'Could not read the receipt. Try a clearer photo or enter items manually.',
+    ocrEmpty: 'No text found on this image. Try again or enter items manually.',
+    ocrNoItems:
+      'Text was found, but no priced items could be parsed. Edit items manually.',
+    ocrReadFailed: 'Could not read the image file for OCR.',
     billNameRequired: 'Enter a name for this bill.',
     deliveryCostInvalid: 'Enter a valid delivery cost (0 or more).',
     deliveryCostRequired: 'Enter the delivery cost, or turn delivery off.',
