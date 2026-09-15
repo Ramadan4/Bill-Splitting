@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Radius, Spacing } from '@/constants/layout';
@@ -17,7 +17,7 @@ type SkeletonProps = {
  */
 export function Skeleton({ height = 16, width = '100%', style }: SkeletonProps) {
   const skeletonColor = useThemeColor({}, 'skeleton');
-  const pulse = useRef(new Animated.Value(0.4)).current;
+  const [pulse] = useState(() => new Animated.Value(0.4));
 
   useEffect(() => {
     const loop = Animated.loop(

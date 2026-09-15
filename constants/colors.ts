@@ -1,55 +1,70 @@
 /**
- * Eye-care color tokens for light + dark themes.
- * Prefer these semantic keys over hard-coded hex in screens.
- *
- * Dark mode uses Deep Slate / Midnight ambients; light mode uses soft zinc/slate
- * neutrals. No pure #000000 / #FFFFFF on primary surfaces.
+ * SplitEat / Stitch design tokens (Slate & Sky).
+ * Source of truth: screenshot/ + Image 13.markdown design system.
  */
-const tintLight = '#0284C7';
-const tintDark = '#38BDF8';
-
 export const Colors = {
   light: {
-    text: '#0F172A',
-    background: '#F1F5F9',
-    tint: tintLight,
-    icon: '#64748B',
-    muted: '#64748B',
-    border: '#E2E8F0',
-    card: '#FAFAFA',
-    /** Raised bento surface stacked above `card`. */
-    surface: '#FFFFFF',
-    /** Shimmer base for skeleton placeholders. */
-    skeleton: '#E2E8F0',
-    shadow: '#0F172A',
-    overlay: 'rgba(15, 23, 42, 0.45)',
-    primary: tintLight,
-    onPrimary: '#FAFAFA',
-    danger: '#DC2626',
-    success: '#16A34A',
-    tabIconDefault: '#64748B',
-    tabIconSelected: tintLight,
+    text: '#171c1f',
+    background: '#f6fafe',
+    tint: '#006194',
+    icon: '#3f4850',
+    muted: '#3f4850',
+    border: '#bfc7d2',
+    card: '#ffffff',
+    surface: '#ffffff',
+    surfaceContainer: '#eaeef2',
+    surfaceContainerLow: '#f0f4f8',
+    surfaceContainerHigh: '#e4e9ed',
+    primaryContainer: '#007bb9',
+    onPrimaryContainer: '#fdfcff',
+    secondaryContainer: '#dae2fd',
+    onSecondaryContainer: '#5c647a',
+    tertiary: '#894d00',
+    tertiaryContainer: '#ac6200',
+    onTertiaryContainer: '#fffbff',
+    skeleton: '#dfe3e7',
+    shadow: '#0f172a',
+    overlay: 'rgba(23, 28, 31, 0.45)',
+    primary: '#006194',
+    onPrimary: '#ffffff',
+    danger: '#ba1a1a',
+    success: '#006194',
+    tabIconDefault: '#3f4850',
+    tabIconSelected: '#006194',
   },
   dark: {
-    text: '#E2E8F0',
-    background: '#0F172A',
-    tint: tintDark,
-    icon: '#94A3B8',
-    muted: '#94A3B8',
-    // Soft dynamic border (border-white/10) instead of a hard grey line.
+    text: '#edf1f5',
+    background: '#090d16',
+    tint: '#93ccff',
+    icon: '#bfc7d2',
+    muted: '#bfc7d2',
     border: 'rgba(255, 255, 255, 0.10)',
     card: '#172033',
-    surface: '#1E293B',
-    skeleton: '#1E293B',
-    shadow: '#090D16',
+    surface: '#1e293b',
+    surfaceContainer: '#1e293b',
+    surfaceContainerLow: '#172033',
+    surfaceContainerHigh: '#243044',
+    primaryContainer: '#007bb9',
+    onPrimaryContainer: '#fdfcff',
+    secondaryContainer: '#3f465c',
+    onSecondaryContainer: '#dae2fd',
+    tertiary: '#ffb875',
+    tertiaryContainer: '#ac6200',
+    onTertiaryContainer: '#fffbff',
+    skeleton: '#1e293b',
+    shadow: '#090d16',
     overlay: 'rgba(9, 13, 22, 0.6)',
-    primary: tintDark,
-    onPrimary: '#090D16',
-    danger: '#F87171',
-    success: '#4ADE80',
-    tabIconDefault: '#94A3B8',
-    tabIconSelected: tintDark,
+    primary: '#93ccff',
+    onPrimary: '#001d31',
+    danger: '#ffb4ab',
+    success: '#93ccff',
+    tabIconDefault: '#bfc7d2',
+    tabIconSelected: '#93ccff',
   },
 };
 
 export type ThemeColorName = keyof typeof Colors.light;
+
+/** Stitch logo from the HTML mock (hotlink allowed). */
+export const SPLITEAT_LOGO_URI =
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuCwC3EE5Kef4anrdy3DAeLXfPyA2REiw79WqDglwM5jkI-nGWAeVgPNrzp7u7Fmj3gyt-v56prd5ORO7q83LN9gF8kiZ0sDTuVLNzoW8k_mtjjgM3tJSNIE0Ug4CNtL0-dMTG3CMoYRs7axhZ5_ofdtJqLS75liiLsdQ0ZHWlp53vEHX1epSIBFjyFyQIaw0Cf8OkIq8US1U3j8SaUuE3fy8UQvuHVue_a5fyNky-dTDmuiK_oOL1rZyA';

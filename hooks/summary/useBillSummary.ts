@@ -9,7 +9,7 @@ import { calculateBill } from '@/utils/calculations';
 
 export function useBillSummary() {
   const bill = useBillStore((state) => state.bill);
-  const { finishBill } = useFinishBillFlow();
+  const { finishBill, finishError } = useFinishBillFlow();
 
   const result = useMemo(() => {
     if (!bill) {
@@ -24,5 +24,6 @@ export function useBillSummary() {
     bill,
     result,
     finishBill,
+    finishError,
   };
 }

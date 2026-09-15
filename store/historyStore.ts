@@ -1,6 +1,7 @@
 /**
  * Persisted finished-bill history (local AsyncStorage).
  */
+import { deleteAsync } from 'expo-file-system/legacy';
 import { create } from 'zustand';
 
 import { readJson, StorageKeys, writeJson } from '@/services/storage';
@@ -49,8 +50,19 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   },
 
   deleteBill: async (billId) => {
+    const deleted = get().bills.find((entry) => entry.id === billId);
     const bills = get().bills.filter((entry) => entry.id !== billId);
     set({ bills });
     await persist(bills);
+
+    // Best-effort cleanup: only app-owned cache files (file://) can be removed;
+    // content:// URIs from the media library aren't ours to delete.
+    if (deleted?.receiptImageUri?.startsWith('file://')) {
+      try {
+        await deleteAsync(deleted.receiptImageUri, { idempotent: true });
+      } catch {
+        // Ignore — the JSON record is already gone, which is what matters.
+      }
+    }
   },
 }));

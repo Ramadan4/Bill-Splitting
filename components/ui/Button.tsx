@@ -6,7 +6,7 @@ import {
   type PressableProps,
 } from 'react-native';
 
-import { depth, PRESS_SCALE, Radius, Spacing, TOUCH_TARGET } from '@/constants/layout';
+import { depth, PRESS_SCALE, Radius, Spacing, CTA_HEIGHT } from '@/constants/layout';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
@@ -86,14 +86,15 @@ export function Button({
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: TOUCH_TARGET,
+    minHeight: CTA_HEIGHT,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.xl,
-    borderRadius: Radius.md,
+    borderRadius: Radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   label: {
     fontWeight: '600',
+    fontSize: 18,
   },
 });

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SplitEat - Item Assignment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Public+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#d6dade",
+                      "inverse-surface": "#2c3134",
+                      "surface-container-high": "#e4e9ed",
+                      "surface-container-low": "#f0f4f8",
+                      "primary-fixed-dim": "#93ccff",
+                      "on-background": "#171c1f",
+                      "primary": "#006194",
+                      "on-primary-container": "#fdfcff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-container": "#ac6200",
+                      "on-primary-fixed": "#001d31",
+                      "error": "#ba1a1a",
+                      "primary-fixed": "#cce5ff",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "surface-tint": "#006398",
+                      "primary-container": "#007bb9",
+                      "surface-bright": "#f6fafe",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#171c1f",
+                      "on-surface-variant": "#3f4850",
+                      "secondary": "#565e74",
+                      "secondary-container": "#dae2fd",
+                      "tertiary": "#894d00",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#eaeef2",
+                      "on-error": "#ffffff",
+                      "outline": "#707881",
+                      "on-tertiary-container": "#fffbff",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#edf1f5",
+                      "on-tertiary-fixed": "#2d1600",
+                      "inverse-primary": "#93ccff",
+                      "surface-container-highest": "#dfe3e7",
+                      "tertiary-fixed-dim": "#ffb875",
+                      "outline-variant": "#bfc7d2",
+                      "background": "#f6fafe",
+                      "surface": "#f6fafe",
+                      "surface-variant": "#dfe3e7",
+                      "on-secondary-container": "#5c647a",
+                      "on-primary-fixed-variant": "#004b73",
+                      "on-tertiary-fixed-variant": "#6b3b00",
+                      "tertiary-fixed": "#ffdcc0",
+                      "error-container": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#131b2e",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "secondary-fixed": "#dae2fd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "8px",
+                      "container-padding": "20px",
+                      "sm": "12px",
+                      "bento-gap": "12px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Public Sans"
+                      ],
+                      "display-lg-mobile": [
+                              "Public Sans"
+                      ],
+                      "arabic-body": [
+                              "IBM Plex Sans Arabic"
+                      ],
+                      "headline-md": [
+                              "Public Sans"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "arabic-body": [
+                              "16px",
+                              {
+                                      "lineHeight": "26px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            -webkit-font-smoothing: antialiased;
+        }
+        .bento-card {
+            background-color: theme('colors.surface-container-lowest');
+            border-radius: theme('borderRadius.xl');
+            padding: theme('spacing.container-padding');
+            box-shadow: 0px 4px 12px rgba(15, 23, 42, 0.04);
+            border: 1px solid theme('colors.outline-variant');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="pb-32">
+<!-- TopAppBar -->
+<header class="bg-background text-primary font-headline-md text-headline-md docked full-width top-0 flat no shadows flex justify-between items-center px-container-padding py-sm w-full sticky z-40">
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant">restaurant</span>
+</button>
+<span class="font-display-lg text-display-lg-mobile text-primary">SplitEat</span>
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="translate">translate</span>
+</button>
+</header>
+<main class="px-container-padding mt-md max-w-2xl mx-auto space-y-bento-gap">
+<!-- Header Info -->
+<div class="mb-lg">
+<h1 class="font-headline-md text-headline-md text-on-surface">Assign Items</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Tap an item to assign it to diners.</p>
+</div>
+<!-- Friend Selection Bar (Horizontal Scroll) -->
+<div class="bento-card overflow-x-auto whitespace-nowrap hide-scrollbar flex space-x-md items-center py-md !px-sm">
+<!-- Everyone (Split Equally) -->
+<button class="flex flex-col items-center flex-shrink-0 group">
+<div class="w-14 h-14 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mb-xs group-hover:opacity-80 transition-opacity ring-2 ring-primary ring-offset-2 ring-offset-background">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface">All</span>
+</button>
+<!-- Friend 1 -->
+<button class="flex flex-col items-center flex-shrink-0 group">
+<img class="w-14 h-14 rounded-full object-cover mb-xs group-hover:opacity-80 transition-opacity border border-outline-variant" data-alt="A small circular avatar portrait of a young woman with dark hair smiling gently, set against a soft, bright white background. The image has a clean, modern aesthetic with soft, natural lighting, consistent with a professional minimalist UI design. The colors are muted and calm." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBym4uumHufuS02DxJyB5WbGEHEfM9A4JBFK0_v5gV33FFLos0Qz8qOQ8BNxKpZIZmM-XVDa7HsZ2dkItjcTR88mtpReekafDe0m6fg6sKJVQqzk8unRkOw_Md37jQSmzBiy2i3Wa93sfBSo6ROmWo7ZDs11qihjBrKBqR3pRQO65qHWLFY-V-78L_V00KFQkoQhP5mcKeF3dxXzlXF32wtb4aWD8-BAf25paBHCh8uHxDzAufJivGnDA"/>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Sarah</span>
+</button>
+<!-- Friend 2 -->
+<button class="flex flex-col items-center flex-shrink-0 group">
+<div class="w-14 h-14 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-xs group-hover:opacity-80 transition-opacity border border-outline-variant">
+<span class="font-headline-md text-headline-md">M</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Mike</span>
+</button>
+<!-- Friend 3 -->
+<button class="flex flex-col items-center flex-shrink-0 group">
+<img class="w-14 h-14 rounded-full object-cover mb-xs group-hover:opacity-80 transition-opacity border border-outline-variant" data-alt="A small circular avatar portrait of a young man with glasses and short brown hair, looking approachable. The background is a soft, bright white. The image features a clean, modern aesthetic with soft, natural lighting, consistent with a professional minimalist UI design. The overall tone is calm and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtQ3zTGYs0IF3nR3lry8-fjH5gh1k77VY9KknvbTV_YKPTXCLGrQOUVNAL05z7YvnWriTiJrj79bhAG3k_uJ9a95Kq-5Bfkrmd0ZIMr98YNk46c67OTThtf12EBfs8rgC65tpTDrZ-2WLOZjfoIXtC7PGyW5bTEudTr6kIcHWrjVNeRZ3AFY4zTd3KgZd1NKORtopcXL9QBfM4B4UtbGMtsrTFWUP1i59NlduxBPR9vddWRvjwhOW0Ww"/>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Alex</span>
+</button>
+<!-- Friend 4 -->
+<button class="flex flex-col items-center flex-shrink-0 group">
+<div class="w-14 h-14 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center mb-xs group-hover:opacity-80 transition-opacity border border-outline-variant">
+<span class="font-headline-md text-headline-md">E</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Emma</span>
+</button>
+</div>
+<!-- Items List -->
+<div class="space-y-sm">
+<!-- Item 1 (Assigned to All) -->
+<div class="bento-card flex justify-between items-start cursor-pointer hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<div class="flex-1 pr-md">
+<div class="flex justify-between items-center mb-xs">
+<h3 class="font-body-lg text-body-lg font-semibold text-on-surface">Margherita Pizza</h3>
+<span class="font-body-lg text-body-lg font-semibold text-primary">$18.50</span>
+</div>
+<div class="flex items-center space-x-xs">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="pie_chart">pie_chart</span>
+                            Split Equally (4)
+                        </span>
+</div>
+</div>
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</div>
+</div>
+<!-- Item 2 (Assigned to Specific Person) -->
+<div class="bento-card flex justify-between items-start cursor-pointer hover:bg-surface-container-low transition-colors active:scale-[0.98] ring-1 ring-primary">
+<div class="flex-1 pr-md">
+<div class="flex justify-between items-center mb-xs">
+<h3 class="font-body-lg text-body-lg font-semibold text-on-surface">Diet Coke</h3>
+<span class="font-body-lg text-body-lg font-semibold text-primary">$3.00</span>
+</div>
+<div class="flex items-center space-x-xs">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="A small circular avatar portrait of a young woman with dark hair smiling gently, set against a soft, bright white background. The image has a clean, modern aesthetic with soft, natural lighting, consistent with a professional minimalist UI design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALIriZz8-Qfq-UeFWiNBJOFzp9ypB8hi2eKOtp9T7O4y51RorOxewklBmxpwxyDxakQbVHvhlqDuIJCMn-ESbRCTSFhQnBdt_u7RF_6JJsxw_cFiPICk4earVNYZwxbp_ESyOhomcmhRxWqKOkZyKFSoQfKpMEGL1eukrNK5Ws4NBXdDkejF2b4F6aud53ENyArmCnbgzVfl-lKuiCyGglHKjq5Uyrua4-pnTx5HotAsXzsWexWDNfXw"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-2">Sarah</span>
+</div>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="check">check</span>
+</div>
+</div>
+<!-- Item 3 (Unassigned) -->
+<div class="bento-card flex justify-between items-start cursor-pointer hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<div class="flex-1 pr-md">
+<div class="flex justify-between items-center mb-xs">
+<h3 class="font-body-lg text-body-lg font-semibold text-on-surface">Truffle Fries</h3>
+<span class="font-body-lg text-body-lg font-semibold text-primary">$12.00</span>
+</div>
+<div class="flex items-center space-x-xs">
+<span class="font-body-sm text-body-sm text-error flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="error">error</span>
+                            Unassigned
+                        </span>
+</div>
+</div>
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</div>
+</div>
+<!-- Item 4 (Multiple People) -->
+<div class="bento-card flex justify-between items-start cursor-pointer hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<div class="flex-1 pr-md">
+<div class="flex justify-between items-center mb-xs">
+<h3 class="font-body-lg text-body-lg font-semibold text-on-surface">Garlic Bread</h3>
+<span class="font-body-lg text-body-lg font-semibold text-primary">$8.00</span>
+</div>
+<div class="flex items-center space-x-xs">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center border-2 border-surface-container-lowest font-label-caps text-label-caps">M</div>
+<div class="w-6 h-6 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center border-2 border-surface-container-lowest font-label-caps text-label-caps">E</div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-2">Mike, Emma</span>
+</div>
+</div>
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant p-container-padding z-50 pb-8 flex items-center justify-between shadow-[0_-4px_12px_rgba(15,23,42,0.04)]">
+<div>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Total Assigned</span>
+<span class="font-headline-md text-headline-md text-on-surface">$29.50 / $41.50</span>
+</div>
+<button class="bg-primary text-on-primary h-14 px-lg rounded-xl font-headline-md text-headline-md font-semibold hover:bg-surface-tint transition-colors active:scale-95 shadow-md flex items-center justify-center">
+            Continue
+        </button>
+</div>
+</body></html>

@@ -15,7 +15,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
  * Final summary UI: bill totals + per-person breakdown + WhatsApp share + done.
  */
 export function SummaryView() {
-  const { bill, result, finishBill } = useBillSummary();
+  const { bill, result, finishBill, finishError } = useBillSummary();
   const { shareBill, isSharing, error: shareError } = useShareBill();
   const { t } = useI18n();
   const titleColor = useThemeColor({}, 'text');
@@ -42,13 +42,13 @@ export function SummaryView() {
       result={result}
       footer={
         <ActionDock>
-          <ErrorBanner message={shareError ? t(shareError) : null} />
-          <SecondaryButton
+          <ErrorBanner message={finishError ? t(finishError) : shareError ? t(shareError) : null} />
+          <PrimaryButton
             label={t('summary.shareWhatsApp')}
             disabled={isSharing}
             onPress={() => void shareBill(bill, result)}
           />
-          <PrimaryButton label={t('summary.done')} onPress={() => void finishBill()} />
+          <SecondaryButton label={t('summary.done')} onPress={() => void finishBill()} />
         </ActionDock>
       }
     />

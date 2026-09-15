@@ -7,7 +7,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 
 import { KeyboardDoneBar } from '@/components/ui/KeyboardDoneBar';
 import { KEYBOARD_SCROLL_PROPS } from '@/components/ui/keyboardScroll';

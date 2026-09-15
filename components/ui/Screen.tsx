@@ -40,8 +40,8 @@ export function Screen({ children, style, ...rest }: ScreenProps) {
             maxWidth: contentMaxWidth,
             // Keep content clear of the gesture bar and landscape notches.
             paddingBottom: insets.bottom + Spacing.lg,
-            paddingLeft: Spacing.xl + insets.left,
-            paddingRight: Spacing.xl + insets.right,
+            paddingLeft: Spacing.container + insets.left,
+            paddingRight: Spacing.container + insets.right,
           },
         ]}>
         {children}
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignSelf: 'center',
     paddingTop: Spacing.lg,
-    gap: Spacing.md,
+    gap: Spacing.bento,
   },
 });

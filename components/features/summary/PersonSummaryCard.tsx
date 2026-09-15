@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { Card } from '@/components/ui/Card';
-import { Spacing } from '@/constants/layout';
+import { PRESS_SCALE, Radius, Spacing } from '@/constants/layout';
 import { useI18n } from '@/hooks/use-i18n';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import type { PersonBillBreakdown } from '@/types';
@@ -9,101 +11,107 @@ import { formatMoney } from '@/utils/formatMoney';
 
 type PersonSummaryCardProps = {
   person: PersonBillBreakdown;
+  /** Rotates avatar tint across people in the list. */
+  accentIndex?: number;
+  defaultExpanded?: boolean;
 };
 
 /**
- * Per-person summary: item lines + food/service/tax/delivery/total.
+ * Stitch person breakdown card with avatar + expandable details.
  */
-export function PersonSummaryCard({ person }: PersonSummaryCardProps) {
+export function PersonSummaryCard({
+  person,
+  accentIndex = 0,
+  defaultExpanded = false,
+}: PersonSummaryCardProps) {
   const { t, locale } = useI18n();
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const textColor = useThemeColor({}, 'text');
-  const mutedColor = useThemeColor({}, 'muted');
-  const borderColor = useThemeColor({}, 'border');
+  const muted = useThemeColor({}, 'muted');
+  const border = useThemeColor({}, 'border');
+  const primary = useThemeColor({}, 'primary');
+  const primaryContainer = useThemeColor({}, 'primaryContainer');
+  const onPrimaryContainer = useThemeColor({}, 'onPrimaryContainer');
+  const secondaryContainer = useThemeColor({}, 'secondaryContainer');
+  const onSecondaryContainer = useThemeColor({}, 'onSecondaryContainer');
+  const tertiaryContainer = useThemeColor({}, 'tertiaryContainer');
+  const onTertiaryContainer = useThemeColor({}, 'onTertiaryContainer');
+
+  const accents = [
+    { bg: primaryContainer, fg: onPrimaryContainer },
+    { bg: secondaryContainer, fg: onSecondaryContainer },
+    { bg: tertiaryContainer, fg: onTertiaryContainer },
+  ];
+  const accent = accents[accentIndex % accents.length];
+  const initial = person.personName.trim().charAt(0).toUpperCase() || '?';
 
   return (
     <Card>
-      <Text style={[styles.name, { color: textColor }]} numberOfLines={1}>
-        {person.personName}
-      </Text>
-
-      {person.itemLines.length === 0 ? (
-        <Text style={[styles.empty, { color: mutedColor }]}>
-          {t('summary.noAssignedItems')}
-        </Text>
-      ) : (
-        person.itemLines.map((line) => (
-          <MetaRow
-            key={`${person.personId}-${line.itemId}`}
-            label={`${line.itemName} × ${line.assignedQuantity}`}
-            value={formatMoney(line.amount, locale)}
-            mutedColor={mutedColor}
-            textColor={textColor}
-          />
-        ))
-      )}
-
-      <View style={[styles.divider, { backgroundColor: borderColor }]} />
-      <MetaRow
-        label={t('summary.food')}
-        value={formatMoney(person.foodSubtotal, locale)}
-        mutedColor={mutedColor}
-        textColor={textColor}
-      />
-      <MetaRow
-        label={t('summary.service')}
-        value={formatMoney(person.serviceCharge, locale)}
-        mutedColor={mutedColor}
-        textColor={textColor}
-      />
-      <MetaRow
-        label={t('summary.tax')}
-        value={formatMoney(person.tax, locale)}
-        mutedColor={mutedColor}
-        textColor={textColor}
-      />
-      {person.deliveryCharge > 0 ? (
-        <MetaRow
-          label={t('summary.delivery')}
-          value={formatMoney(person.deliveryCharge, locale)}
-          mutedColor={mutedColor}
-          textColor={textColor}
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => setExpanded((value) => !value)}
+        style={({ pressed }) => [
+          styles.header,
+          { borderBottomColor: border, transform: [{ scale: pressed ? PRESS_SCALE : 1 }] },
+        ]}>
+        <View style={styles.identity}>
+          <View style={[styles.avatar, { backgroundColor: accent.bg }]}>
+            <Text style={[styles.initial, { color: accent.fg }]}>{initial}</Text>
+          </View>
+          <View style={styles.nameBlock}>
+            <Text style={[styles.name, { color: textColor }]} numberOfLines={1}>
+              {person.personName}
+            </Text>
+            <Text style={[styles.total, { color: primary }]} numberOfLines={1}>
+              {formatMoney(person.total, locale)}
+            </Text>
+          </View>
+        </View>
+        <MaterialIcons
+          name={expanded ? 'expand-more' : 'chevron-right'}
+          size={24}
+          color={muted}
         />
-      ) : null}
-      <MetaRow
-        label={t('summary.total')}
-        value={formatMoney(person.total, locale)}
-        mutedColor={mutedColor}
-        textColor={textColor}
-        bold
-      />
+      </Pressable>
+
+      {expanded ? (
+        <View style={styles.grid}>
+          <Meta label={t('summary.food')} value={formatMoney(person.foodSubtotal, locale)} muted={muted} text={textColor} />
+          <Meta label={t('summary.service')} value={formatMoney(person.serviceCharge, locale)} muted={muted} text={textColor} />
+          <Meta label={t('summary.tax')} value={formatMoney(person.tax, locale)} muted={muted} text={textColor} />
+          {person.deliveryCharge > 0 ? (
+            <Meta
+              label={t('summary.delivery')}
+              value={formatMoney(person.deliveryCharge, locale)}
+              muted={muted}
+              text={textColor}
+            />
+          ) : null}
+        </View>
+      ) : (
+        <Text style={[styles.hint, { color: muted }]}>{t('summary.tapDetails')}</Text>
+      )}
     </Card>
   );
 }
 
-/** Label/value pair; long item names truncate rather than pushing the amount. */
-function MetaRow({
+function Meta({
   label,
   value,
-  mutedColor,
-  textColor,
-  bold,
+  muted,
+  text,
 }: {
   label: string;
   value: string;
-  mutedColor: string;
-  textColor: string;
-  bold?: boolean;
+  muted: string;
+  text: string;
 }) {
   return (
-    <View style={styles.line}>
-      <Text
-        numberOfLines={1}
-        style={[styles.lineLabel, { color: mutedColor, fontWeight: bold ? '700' : '500' }]}>
+    <View style={styles.metaRow}>
+      <Text style={[styles.metaLabel, { color: muted }]} numberOfLines={1}>
         {label}
       </Text>
-      <Text
-        numberOfLines={1}
-        style={[styles.lineValue, { color: textColor, fontWeight: bold ? '800' : '600' }]}>
+      <Text style={[styles.metaValue, { color: text }]} numberOfLines={1}>
         {value}
       </Text>
     </View>
@@ -111,28 +119,59 @@ function MetaRow({
 }
 
 const styles = StyleSheet.create({
-  name: {
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: Spacing.md,
+    marginBottom: Spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  identity: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    flex: 1,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: Radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  initial: {
     fontSize: 18,
     fontWeight: '700',
-    marginBottom: Spacing.xs,
   },
-  empty: {
-    fontSize: 13,
+  nameBlock: {
+    flex: 1,
+    gap: 2,
   },
-  line: {
+  name: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  total: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  grid: {
+    gap: Spacing.sm,
+  },
+  metaRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: Spacing.md,
   },
-  lineLabel: {
-    fontSize: 13,
-    flex: 1,
+  metaLabel: {
+    fontSize: 14,
   },
-  lineValue: {
-    fontSize: 13,
+  metaValue: {
+    fontSize: 14,
+    fontWeight: '500',
   },
-  divider: {
-    height: StyleSheet.hairlineWidth,
-    marginVertical: Spacing.xs,
+  hint: {
+    fontSize: 14,
   },
 });

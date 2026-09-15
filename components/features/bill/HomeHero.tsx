@@ -1,15 +1,15 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { LocaleThemeControls } from '@/components/features/settings/LocaleThemeControls';
-import { ActionDock } from '@/components/ui/ActionDock';
-import { Card } from '@/components/ui/Card';
-import { PressableCard } from '@/components/ui/PressableCard';
-import { PrimaryButton } from '@/components/ui/PrimaryButton';
-import { Screen } from '@/components/ui/Screen';
-import { Spacing } from '@/constants/layout';
+import { AppTopBar } from '@/components/ui/AppTopBar';
+import { HomeBottomNav, type HomeTab } from '@/components/ui/HomeBottomNav';
+import { depth, PRESS_SCALE, Radius, Spacing, CTA_HEIGHT } from '@/constants/layout';
+import { useHaptics } from '@/hooks/useHaptics';
 import { useI18n } from '@/hooks/use-i18n';
 import { useResponsive } from '@/hooks/useResponsive';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { usePreferencesStore } from '@/store/preferencesStore';
 
 type HomeHeroProps = {
   onCreateBill: () => void;
@@ -18,91 +18,251 @@ type HomeHeroProps = {
 };
 
 /**
- * Home bento layout: brand hero, navigation tiles, settings card.
- * The create-bill CTA is docked at the bottom so the most frequent action
- * stays inside the thumb-reach zone on tall devices.
+ * Stitch home: top bar, hero, bento tiles, theme/language chips, CTA, bottom nav.
  */
 export function HomeHero({ onCreateBill, onOpenHistory, onOpenGroups }: HomeHeroProps) {
-  const { t } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const { isCompact } = useResponsive();
-  const titleColor = useThemeColor({}, 'text');
-  const mutedColor = useThemeColor({}, 'muted');
+  const insets = useSafeAreaInsets();
+  const { trigger } = useHaptics();
+  const background = useThemeColor({}, 'background');
+  const textColor = useThemeColor({}, 'text');
+  const muted = useThemeColor({}, 'muted');
+  const card = useThemeColor({}, 'card');
+  const shadow = useThemeColor({}, 'shadow');
+  const secondaryContainer = useThemeColor({}, 'secondaryContainer');
+  const onSecondaryContainer = useThemeColor({}, 'onSecondaryContainer');
+  const primaryContainer = useThemeColor({}, 'primaryContainer');
+  const onPrimaryContainer = useThemeColor({}, 'onPrimaryContainer');
+  const surfaceContainer = useThemeColor({}, 'surfaceContainer');
+  const border = useThemeColor({}, 'border');
+  const primary = useThemeColor({}, 'primary');
+  const onPrimary = useThemeColor({}, 'onPrimary');
+
+  const themePreference = usePreferencesStore((s) => s.themePreference);
+  const setThemePreference = usePreferencesStore((s) => s.setThemePreference);
+  const setLocalePreference = usePreferencesStore((s) => s.setLocalePreference);
+
+  const cycleTheme = () => {
+    trigger('light');
+    const order = ['system', 'light', 'dark'] as const;
+    const idx = order.indexOf(themePreference);
+    void setThemePreference(order[(idx + 1) % order.length]);
+  };
+
+  const toggleLocale = () => {
+    trigger('light');
+    void setLocalePreference(locale === 'ar' ? 'en' : 'ar');
+  };
+
+  const onTab = (tab: HomeTab) => {
+    if (tab === 'history') {
+      onOpenHistory();
+      return;
+    }
+    if (tab === 'split') {
+      // Split is the elevated primary chip — same entry point as the CTA.
+      onCreateBill();
+      return;
+    }
+    if (tab === 'groups') {
+      onOpenGroups();
+      return;
+    }
+    if (tab === 'profile') {
+      // Profile opens language cycle as a lightweight settings entry point.
+      toggleLocale();
+    }
+  };
 
   return (
-    <Screen>
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}>
+    <View
+      style={[
+        styles.root,
+        {
+          backgroundColor: background,
+          direction: isRtl ? 'rtl' : 'ltr',
+          paddingTop: insets.top,
+        },
+      ]}>
+      <AppTopBar onPressTranslate={toggleLocale} />
+
+      <View style={styles.main}>
         <View style={[styles.hero, isCompact && styles.heroCompact]}>
-          {/* Shrink the display type on small phones so it never wraps oddly. */}
-          <Text style={[styles.brand, isCompact && styles.brandCompact, { color: titleColor }]}>
-            {t('home.brand')}
-          </Text>
-          <Text style={[styles.subtitle, { color: mutedColor }]}>{t('home.subtitle')}</Text>
+          <Text style={[styles.brand, { color: textColor }]}>{t('home.brand')}</Text>
+          <Text style={[styles.subtitle, { color: muted }]}>{t('home.subtitle')}</Text>
         </View>
 
         <View style={styles.grid}>
-          <PressableCard style={styles.tile} onPress={onOpenHistory}>
-            <Text style={[styles.tileLabel, { color: titleColor }]} numberOfLines={2}>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => {
+              trigger('light');
+              onOpenHistory();
+            }}
+            style={({ pressed }) => [
+              styles.tile,
+              { backgroundColor: card },
+              depth(1, shadow),
+              { transform: [{ scale: pressed ? PRESS_SCALE : 1 }] },
+            ]}>
+            <View style={[styles.iconCircle, { backgroundColor: secondaryContainer }]}>
+              <MaterialIcons name="history" size={36} color={onSecondaryContainer} />
+            </View>
+            <Text style={[styles.tileLabel, { color: textColor }]} numberOfLines={2}>
               {t('home.history')}
             </Text>
-          </PressableCard>
-          <PressableCard style={styles.tile} onPress={onOpenGroups}>
-            <Text style={[styles.tileLabel, { color: titleColor }]} numberOfLines={2}>
+          </Pressable>
+
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => {
+              trigger('light');
+              onOpenGroups();
+            }}
+            style={({ pressed }) => [
+              styles.tile,
+              { backgroundColor: card },
+              depth(1, shadow),
+              { transform: [{ scale: pressed ? PRESS_SCALE : 1 }] },
+            ]}>
+            <View style={[styles.iconCircle, { backgroundColor: primaryContainer }]}>
+              <MaterialIcons name="group" size={36} color={onPrimaryContainer} />
+            </View>
+            <Text style={[styles.tileLabel, { color: textColor }]} numberOfLines={2}>
               {t('home.groups')}
             </Text>
-          </PressableCard>
+          </Pressable>
         </View>
 
-        <Card>
-          <LocaleThemeControls />
-        </Card>
-      </ScrollView>
+        <View style={styles.chips}>
+          <Pressable
+            onPress={cycleTheme}
+            style={[styles.chip, { backgroundColor: surfaceContainer, borderColor: border }]}>
+            <MaterialIcons name="palette" size={16} color={muted} />
+            <Text style={[styles.chipLabel, { color: muted }]}>{t('settings.theme')}</Text>
+          </Pressable>
+          <Pressable
+            onPress={toggleLocale}
+            style={[styles.chip, { backgroundColor: surfaceContainer, borderColor: border }]}>
+            <MaterialIcons name="language" size={16} color={muted} />
+            <Text style={[styles.chipLabel, { color: muted }]}>{t('settings.language')}</Text>
+          </Pressable>
+        </View>
+      </View>
 
-      <ActionDock>
-        <PrimaryButton label={t('home.createBill')} onPress={onCreateBill} />
-      </ActionDock>
-    </Screen>
+      <View style={styles.ctaWrap}>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => {
+            trigger('light');
+            onCreateBill();
+          }}
+          style={({ pressed }) => [
+            styles.cta,
+            { backgroundColor: primary },
+            depth(2, shadow),
+            { transform: [{ scale: pressed ? PRESS_SCALE : 1 }] },
+          ]}>
+          <MaterialIcons name="add-circle" size={22} color={onPrimary} />
+          <Text style={[styles.ctaLabel, { color: onPrimary }]} numberOfLines={1}>
+            {t('home.createBill')}
+          </Text>
+        </Pressable>
+      </View>
+
+      <HomeBottomNav active="split" onSelect={onTab} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {
+  root: {
     flex: 1,
   },
-  content: {
-    gap: Spacing.lg,
-    paddingBottom: Spacing.lg,
+  main: {
+    flex: 1,
+    paddingHorizontal: Spacing.container,
+    gap: Spacing.bento,
   },
   hero: {
+    alignItems: 'center',
+    paddingVertical: Spacing.xl,
     gap: Spacing.sm,
-    paddingTop: Spacing.xl,
   },
   heroCompact: {
-    paddingTop: Spacing.md,
+    paddingVertical: Spacing.md,
   },
   brand: {
-    fontSize: 36,
-    fontWeight: '800',
-  },
-  brandCompact: {
     fontSize: 28,
+    fontWeight: '700',
+    letterSpacing: -0.4,
   },
   subtitle: {
     fontSize: 16,
-    lineHeight: 22,
+    lineHeight: 24,
+    textAlign: 'center',
   },
   grid: {
     flexDirection: 'row',
-    gap: Spacing.md,
+    gap: Spacing.bento,
   },
-  // Equal-width tiles keep the bento row balanced on any screen size.
   tile: {
     flex: 1,
+    aspectRatio: 1,
+    borderRadius: Radius.lg,
+    padding: Spacing.xl,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.md,
+  },
+  iconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: Radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tileLabel: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  chips: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: Spacing.md,
+    marginTop: Spacing.md,
+  },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.pill,
+    borderWidth: 1,
+  },
+  chipLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
+  ctaWrap: {
+    paddingHorizontal: Spacing.container,
+    paddingBottom: Spacing.md,
+  },
+  cta: {
+    height: CTA_HEIGHT,
+    borderRadius: Radius.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+  },
+  ctaLabel: {
+    fontSize: 18,
+    fontWeight: '600',
   },
 });

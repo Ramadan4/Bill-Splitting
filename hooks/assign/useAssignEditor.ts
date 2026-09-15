@@ -168,6 +168,19 @@ export function useAssignEditor() {
     people.length > 0 &&
     itemStatuses.every((row) => row.status === 'complete');
 
+  /** Food value already assigned vs full items subtotal (Stitch footer). */
+  const assignedTotals = useMemo(() => {
+    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const assigned = assignments.reduce((sum, row) => {
+      const item = items.find((entry) => entry.id === row.itemId);
+      if (!item) {
+        return sum;
+      }
+      return sum + item.price * row.quantity;
+    }, 0);
+    return { assigned, total };
+  }, [assignments, items]);
+
   const continueToCharges = () => {
     if (!canContinue) {
       setError('errors.assignIncomplete');
@@ -181,6 +194,7 @@ export function useAssignEditor() {
   return {
     people,
     itemStatuses,
+    assignedTotals,
     error,
     errorOptions,
     canContinue,
