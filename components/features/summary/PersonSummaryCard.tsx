@@ -24,7 +24,7 @@ export function PersonSummaryCard({
   accentIndex = 0,
   defaultExpanded = false,
 }: PersonSummaryCardProps) {
-  const { t, locale } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const textColor = useThemeColor({}, 'text');
   const muted = useThemeColor({}, 'muted');
@@ -49,6 +49,7 @@ export function PersonSummaryCard({
     <Card>
       <Pressable
         accessibilityRole="button"
+        accessibilityState={{ expanded }}
         onPress={() => setExpanded((value) => !value)}
         style={({ pressed }) => [
           styles.header,
@@ -68,7 +69,8 @@ export function PersonSummaryCard({
           </View>
         </View>
         <MaterialIcons
-          name={expanded ? 'expand-more' : 'chevron-right'}
+          // Collapsed chevron points toward the reading end, so it mirrors in Arabic.
+          name={expanded ? 'expand-more' : isRtl ? 'chevron-left' : 'chevron-right'}
           size={24}
           color={muted}
         />

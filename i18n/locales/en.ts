@@ -1,10 +1,11 @@
 /**
- * English UI copy for SplitEat.
+ * English UI copy for Kolwa7ed.
  * Keep keys in sync with `ar.ts`.
  */
 export const en = {
   common: {
     next: 'Next',
+    back: 'Back',
     continue: 'Continue',
     cancel: 'Cancel',
     edit: 'Edit',
@@ -18,13 +19,20 @@ export const en = {
     confirmDeleteBill: 'This bill will be removed from history.',
   },
   home: {
-    brand: 'SplitEat',
+    brand: 'Kolwa7ed',
     subtitle: 'Fair and social bill splitting',
     createBill: 'Create New Bill',
     history: 'Bill History',
     groups: 'Friend Groups',
+    heroTitle: 'Split the bill in seconds',
+    heroBody: 'Snap the receipt, tag who ate what — tax and service are handled for you.',
+    historyHint: 'Your past bills',
+    groupsHint: 'Saved friends',
+    quickActions: 'Quick actions',
   },
   settings: {
+    title: 'Settings',
+    done: 'Done',
     language: 'Language',
     theme: 'Theme',
     english: 'English',
@@ -36,7 +44,7 @@ export const en = {
       'Layout direction is applied in-app. Fully restart the app if native chrome still looks mirrored wrong.',
   },
   nav: {
-    home: 'SplitEat',
+    home: 'Kolwa7ed',
     create: 'New Bill',
     inputMethod: 'Input Method',
     receipt: 'Receipt Photo',
@@ -49,6 +57,7 @@ export const en = {
     groups: 'Groups',
     split: 'Split',
     profile: 'Profile',
+    settings: 'Settings',
   },
   create: {
     title: 'Create New Bill',
@@ -68,7 +77,7 @@ export const en = {
   receipt: {
     title: 'Scan Receipt',
     description:
-      'Take or choose a receipt photo. SplitEat reads the text and fills items — always review prices before continuing.',
+      'Take or choose a receipt photo. Kolwa7ed reads the text and fills items — always review prices before continuing.',
     positionHint: 'POSITION RECEIPT IN FRAME',
     captureTitle: 'Capture Details',
     captureBody: 'Ensure all text is legible and well-lit for best results.',

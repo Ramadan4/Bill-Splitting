@@ -48,7 +48,8 @@ export function AssignItemCard({
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'muted');
   const primary = useThemeColor({}, 'primary');
-  const onPrimary = useThemeColor({}, 'onPrimary');
+  const onPrimary = useThemeColor({}, 'onBrand');
+  const brand = useThemeColor({}, 'brand');
   const danger = useThemeColor({}, 'danger');
   const surfaceContainer = useThemeColor({}, 'surfaceContainer');
   const border = useThemeColor({}, 'border');
@@ -143,7 +144,7 @@ export function AssignItemCard({
           style={[
             styles.actionOrb,
             {
-              backgroundColor: status === 'complete' ? primary : surfaceContainer,
+              backgroundColor: status === 'complete' ? brand : surfaceContainer,
               borderColor: border,
             },
           ]}>
@@ -171,7 +172,7 @@ export function AssignItemCard({
           </View>
           <View style={styles.actions}>
             <SecondaryButton
-              label={t('assign.splitEqually')}
+              label={t('assign.splitEqually')} icon="call-split"
               onPress={onSplitEqually}
               style={styles.flex}
             />

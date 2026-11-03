@@ -18,12 +18,14 @@ export function ReceiptPreview({ uri, compact = false }: ReceiptPreviewProps) {
   const { t } = useI18n();
   const borderColor = useThemeColor({}, 'border');
   const mutedColor = useThemeColor({}, 'muted');
+  // Theme-aware wash: the old fixed black tint vanished on dark surfaces.
+  const scrim = useThemeColor({}, 'scrim');
 
   return (
     <View style={[styles.wrap, compact && styles.compactWrap, { borderColor }]}>
       <Image
         source={{ uri }}
-        style={compact ? styles.compactImage : styles.image}
+        style={[compact ? styles.compactImage : styles.image, { backgroundColor: scrim }]}
         contentFit="contain"
         accessibilityLabel={t('receipt.previewA11y')}
       />
@@ -46,12 +48,10 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 280,
-    backgroundColor: '#00000010',
   },
   compactImage: {
     width: '100%',
     height: 120,
-    backgroundColor: '#00000010',
   },
   caption: {
     fontSize: 12,

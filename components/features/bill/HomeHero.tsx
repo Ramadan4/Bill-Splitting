@@ -1,15 +1,16 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { HeroCard } from '@/components/features/home/HeroCard';
+import { QuickActionRow } from '@/components/features/home/QuickActionRow';
+import { SettingsSheet } from '@/components/features/settings/SettingsSheet';
 import { AppTopBar } from '@/components/ui/AppTopBar';
 import { HomeBottomNav, type HomeTab } from '@/components/ui/HomeBottomNav';
-import { depth, PRESS_SCALE, Radius, Spacing, CTA_HEIGHT } from '@/constants/layout';
-import { useHaptics } from '@/hooks/useHaptics';
+import { Spacing } from '@/constants/layout';
 import { useI18n } from '@/hooks/use-i18n';
 import { useResponsive } from '@/hooks/useResponsive';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { usePreferencesStore } from '@/store/preferencesStore';
 
 type HomeHeroProps = {
   onCreateBill: () => void;
@@ -18,160 +19,60 @@ type HomeHeroProps = {
 };
 
 /**
- * Stitch home: top bar, hero, bento tiles, theme/language chips, CTA, bottom nav.
+ * Home layout: top bar, hero CTA card, quick actions, bottom nav + settings sheet.
+ * Navigation lives in `useHomeActions`; this file only arranges UI.
  */
 export function HomeHero({ onCreateBill, onOpenHistory, onOpenGroups }: HomeHeroProps) {
-  const { t, locale, isRtl } = useI18n();
-  const { isCompact } = useResponsive();
+  const { t, locale, setLocalePreference } = useI18n();
+  const { contentMaxWidth } = useResponsive();
   const insets = useSafeAreaInsets();
-  const { trigger } = useHaptics();
   const background = useThemeColor({}, 'background');
-  const textColor = useThemeColor({}, 'text');
   const muted = useThemeColor({}, 'muted');
-  const card = useThemeColor({}, 'card');
-  const shadow = useThemeColor({}, 'shadow');
-  const secondaryContainer = useThemeColor({}, 'secondaryContainer');
-  const onSecondaryContainer = useThemeColor({}, 'onSecondaryContainer');
-  const primaryContainer = useThemeColor({}, 'primaryContainer');
-  const onPrimaryContainer = useThemeColor({}, 'onPrimaryContainer');
-  const surfaceContainer = useThemeColor({}, 'surfaceContainer');
-  const border = useThemeColor({}, 'border');
-  const primary = useThemeColor({}, 'primary');
-  const onPrimary = useThemeColor({}, 'onPrimary');
-
-  const themePreference = usePreferencesStore((s) => s.themePreference);
-  const setThemePreference = usePreferencesStore((s) => s.setThemePreference);
-  const setLocalePreference = usePreferencesStore((s) => s.setLocalePreference);
-
-  const cycleTheme = () => {
-    trigger('light');
-    const order = ['system', 'light', 'dark'] as const;
-    const idx = order.indexOf(themePreference);
-    void setThemePreference(order[(idx + 1) % order.length]);
-  };
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const toggleLocale = () => {
-    trigger('light');
     void setLocalePreference(locale === 'ar' ? 'en' : 'ar');
   };
 
   const onTab = (tab: HomeTab) => {
-    if (tab === 'history') {
-      onOpenHistory();
-      return;
-    }
-    if (tab === 'split') {
-      // Split is the elevated primary chip — same entry point as the CTA.
-      onCreateBill();
-      return;
-    }
-    if (tab === 'groups') {
-      onOpenGroups();
-      return;
-    }
-    if (tab === 'profile') {
-      // Profile opens language cycle as a lightweight settings entry point.
-      toggleLocale();
-    }
+    // Map each tab to its destination; "split" mirrors the hero CTA.
+    const actions: Record<HomeTab, () => void> = {
+      split: onCreateBill,
+      history: onOpenHistory,
+      groups: onOpenGroups,
+      settings: () => setSettingsOpen(true),
+    };
+    actions[tab]();
   };
 
   return (
-    <View
-      style={[
-        styles.root,
-        {
-          backgroundColor: background,
-          direction: isRtl ? 'rtl' : 'ltr',
-          paddingTop: insets.top,
-        },
-      ]}>
-      <AppTopBar onPressTranslate={toggleLocale} />
+    <View style={[styles.root, { backgroundColor: background, paddingTop: insets.top }]}>
+      <AppTopBar onPressLanguage={toggleLocale} onPressSettings={() => setSettingsOpen(true)} />
 
-      <View style={styles.main}>
-        <View style={[styles.hero, isCompact && styles.heroCompact]}>
-          <Text style={[styles.brand, { color: textColor }]}>{t('home.brand')}</Text>
-          <Text style={[styles.subtitle, { color: muted }]}>{t('home.subtitle')}</Text>
-        </View>
+      <ScrollView
+        contentContainerStyle={[styles.main, { maxWidth: contentMaxWidth }]}
+        showsVerticalScrollIndicator={false}>
+        <HeroCard onCreateBill={onCreateBill} />
 
-        <View style={styles.grid}>
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => {
-              trigger('light');
-              onOpenHistory();
-            }}
-            style={({ pressed }) => [
-              styles.tile,
-              { backgroundColor: card },
-              depth(1, shadow),
-              { transform: [{ scale: pressed ? PRESS_SCALE : 1 }] },
-            ]}>
-            <View style={[styles.iconCircle, { backgroundColor: secondaryContainer }]}>
-              <MaterialIcons name="history" size={36} color={onSecondaryContainer} />
-            </View>
-            <Text style={[styles.tileLabel, { color: textColor }]} numberOfLines={2}>
-              {t('home.history')}
-            </Text>
-          </Pressable>
-
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => {
-              trigger('light');
-              onOpenGroups();
-            }}
-            style={({ pressed }) => [
-              styles.tile,
-              { backgroundColor: card },
-              depth(1, shadow),
-              { transform: [{ scale: pressed ? PRESS_SCALE : 1 }] },
-            ]}>
-            <View style={[styles.iconCircle, { backgroundColor: primaryContainer }]}>
-              <MaterialIcons name="group" size={36} color={onPrimaryContainer} />
-            </View>
-            <Text style={[styles.tileLabel, { color: textColor }]} numberOfLines={2}>
-              {t('home.groups')}
-            </Text>
-          </Pressable>
-        </View>
-
-        <View style={styles.chips}>
-          <Pressable
-            onPress={cycleTheme}
-            style={[styles.chip, { backgroundColor: surfaceContainer, borderColor: border }]}>
-            <MaterialIcons name="palette" size={16} color={muted} />
-            <Text style={[styles.chipLabel, { color: muted }]}>{t('settings.theme')}</Text>
-          </Pressable>
-          <Pressable
-            onPress={toggleLocale}
-            style={[styles.chip, { backgroundColor: surfaceContainer, borderColor: border }]}>
-            <MaterialIcons name="language" size={16} color={muted} />
-            <Text style={[styles.chipLabel, { color: muted }]}>{t('settings.language')}</Text>
-          </Pressable>
-        </View>
-      </View>
-
-      <View style={styles.ctaWrap}>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => {
-            trigger('light');
-            onCreateBill();
-          }}
-          style={({ pressed }) => [
-            styles.cta,
-            { backgroundColor: primary },
-            depth(2, shadow),
-            { transform: [{ scale: pressed ? PRESS_SCALE : 1 }] },
-          ]}>
-          <MaterialIcons name="add-circle" size={22} color={onPrimary} />
-          <Text style={[styles.ctaLabel, { color: onPrimary }]} numberOfLines={1}>
-            {t('home.createBill')}
-          </Text>
-        </Pressable>
-      </View>
+        <Text style={[styles.section, { color: muted }]}>{t('home.quickActions')}</Text>
+        <QuickActionRow
+          icon="history"
+          title={t('home.history')}
+          subtitle={t('home.historyHint')}
+          tone="primary"
+          onPress={onOpenHistory}
+        />
+        <QuickActionRow
+          icon="group"
+          title={t('home.groups')}
+          subtitle={t('home.groupsHint')}
+          tone="tertiary"
+          onPress={onOpenGroups}
+        />
+      </ScrollView>
 
       <HomeBottomNav active="split" onSelect={onTab} />
+      <SettingsSheet visible={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </View>
   );
 }
@@ -181,88 +82,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   main: {
-    flex: 1,
+    width: '100%',
+    alignSelf: 'center',
     paddingHorizontal: Spacing.container,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.xl,
     gap: Spacing.bento,
   },
-  hero: {
-    alignItems: 'center',
-    paddingVertical: Spacing.xl,
-    gap: Spacing.sm,
-  },
-  heroCompact: {
-    paddingVertical: Spacing.md,
-  },
-  brand: {
-    fontSize: 28,
+  section: {
+    fontSize: 13,
     fontWeight: '700',
-    letterSpacing: -0.4,
-  },
-  subtitle: {
-    fontSize: 16,
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  grid: {
-    flexDirection: 'row',
-    gap: Spacing.bento,
-  },
-  tile: {
-    flex: 1,
-    aspectRatio: 1,
-    borderRadius: Radius.lg,
-    padding: Spacing.xl,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.md,
-  },
-  iconCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: Radius.pill,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tileLabel: {
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  chips: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: Spacing.md,
     marginTop: Spacing.md,
-  },
-  chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: Radius.pill,
-    borderWidth: 1,
-  },
-  chipLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-  },
-  ctaWrap: {
-    paddingHorizontal: Spacing.container,
-    paddingBottom: Spacing.md,
-  },
-  cta: {
-    height: CTA_HEIGHT,
-    borderRadius: Radius.lg,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.sm,
-  },
-  ctaLabel: {
-    fontSize: 18,
-    fontWeight: '600',
   },
 });

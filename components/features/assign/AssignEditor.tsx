@@ -44,7 +44,8 @@ export function AssignEditor() {
   const titleColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'muted');
   const primary = useThemeColor({}, 'primary');
-  const onPrimary = useThemeColor({}, 'onPrimary');
+  const onPrimary = useThemeColor({}, 'onBrand');
+  const brand = useThemeColor({}, 'brand');
   const border = useThemeColor({}, 'border');
   const secondaryContainer = useThemeColor({}, 'secondaryContainer');
   const onSecondaryContainer = useThemeColor({}, 'onSecondaryContainer');
@@ -104,8 +105,8 @@ export function AssignEditor() {
                   style={[
                     styles.avatar,
                     {
-                      backgroundColor: primary,
-                      borderColor: primary,
+                      backgroundColor: brand,
+                      borderColor: brand,
                       borderWidth: filterPersonId === null ? 3 : 0,
                     },
                   ]}>
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.sm,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '700',
   },
   description: {
@@ -220,13 +221,13 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
   },
   diner: {
-    width: 64,
+    width: 56,
     alignItems: 'center',
     gap: Spacing.xs,
   },
   avatar: {
-    width: 52,
-    height: 52,
+    width: 44,
+    height: 44,
     borderRadius: Radius.pill,
     alignItems: 'center',
     justifyContent: 'center',

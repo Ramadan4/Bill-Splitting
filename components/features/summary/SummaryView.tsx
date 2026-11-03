@@ -28,7 +28,7 @@ export function SummaryView() {
         <Text style={[styles.description, { color: mutedColor }]}>
           {t('summary.noBillDescription')}
         </Text>
-        <PrimaryButton label={t('summary.backHome')} onPress={() => void finishBill()} />
+        <PrimaryButton label={t('summary.backHome')} icon="home" onPress={() => void finishBill()} />
       </Screen>
     );
   }
@@ -44,11 +44,11 @@ export function SummaryView() {
         <ActionDock>
           <ErrorBanner message={finishError ? t(finishError) : shareError ? t(shareError) : null} />
           <PrimaryButton
-            label={t('summary.shareWhatsApp')}
+            label={t('summary.shareWhatsApp')} icon="share"
             disabled={isSharing}
             onPress={() => void shareBill(bill, result)}
           />
-          <SecondaryButton label={t('summary.done')} onPress={() => void finishBill()} />
+          <SecondaryButton label={t('summary.done')} icon="check" onPress={() => void finishBill()} />
         </ActionDock>
       }
     />
@@ -57,7 +57,7 @@ export function SummaryView() {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
   },
   description: {

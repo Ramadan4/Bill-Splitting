@@ -1,70 +1,89 @@
 /**
- * SplitEat / Stitch design tokens (Slate & Sky).
- * Source of truth: screenshot/ + Image 13.markdown design system.
+ * SplitEat design tokens — "Warm Orange" palette.
+ *
+ * Why orange: it is the dominant color of the most-used food & delivery apps,
+ * reads as appetite/energy, and pops on warm off-white canvases. Cards are
+ * pure white on a cream background with soft shadows instead of heavy borders.
+ *
+ * Two orange roles:
+ * - `brand`   — the vivid photo orange for big filled surfaces (CTA buttons,
+ *               hero card, logo, nav indicator) where text on it is bold.
+ * - `primary` — a deeper orange for orange TEXT/ICONS on light surfaces, so
+ *               small labels still pass WCAG AA (≥ 4.5:1). In dark mode the
+ *               bright orange passes on its own, so both roles share it.
+ *
+ * `success` is a real green (no longer aliased to primary) so "settled /
+ * balanced" states never look like the brand color.
  */
 export const Colors = {
   light: {
-    text: '#171c1f',
-    background: '#f6fafe',
-    tint: '#006194',
-    icon: '#3f4850',
-    muted: '#3f4850',
-    border: '#bfc7d2',
-    card: '#ffffff',
-    surface: '#ffffff',
-    surfaceContainer: '#eaeef2',
-    surfaceContainerLow: '#f0f4f8',
-    surfaceContainerHigh: '#e4e9ed',
-    primaryContainer: '#007bb9',
-    onPrimaryContainer: '#fdfcff',
-    secondaryContainer: '#dae2fd',
-    onSecondaryContainer: '#5c647a',
-    tertiary: '#894d00',
-    tertiaryContainer: '#ac6200',
-    onTertiaryContainer: '#fffbff',
-    skeleton: '#dfe3e7',
-    shadow: '#0f172a',
-    overlay: 'rgba(23, 28, 31, 0.45)',
-    primary: '#006194',
-    onPrimary: '#ffffff',
-    danger: '#ba1a1a',
-    success: '#006194',
-    tabIconDefault: '#3f4850',
-    tabIconSelected: '#006194',
+    text: '#1C1410',
+    background: '#FBF8F6',
+    tint: '#C2410C',
+    icon: '#6F625A',
+    muted: '#6F625A',
+    border: '#EFE6DF',
+    card: '#FFFFFF',
+    surface: '#FFFFFF',
+    surfaceContainer: '#F3EDE8',
+    surfaceContainerLow: '#F7F2EE',
+    surfaceContainerHigh: '#EDE4DD',
+    brand: '#F26B1D',
+    onBrand: '#FFFFFF',
+    primaryContainer: '#FFEADB',
+    onPrimaryContainer: '#9A3412',
+    secondaryContainer: '#F3EDE8',
+    onSecondaryContainer: '#4A3F38',
+    tertiary: '#0F766E',
+    tertiaryContainer: '#D5F3EE',
+    onTertiaryContainer: '#0F5F58',
+    skeleton: '#EDE4DD',
+    shadow: '#7A4A2A',
+    overlay: 'rgba(28, 20, 16, 0.45)',
+    /** Subtle wash behind images/previews (visible on both card + background). */
+    scrim: 'rgba(28, 20, 16, 0.05)',
+    primary: '#C2410C',
+    onPrimary: '#FFFFFF',
+    danger: '#C62828',
+    /** Soft red fill for destructive buttons / error banners. */
+    dangerContainer: '#FDECEA',
+    success: '#15803D',
+    tabIconDefault: '#6F625A',
+    tabIconSelected: '#C2410C',
   },
   dark: {
-    text: '#edf1f5',
-    background: '#090d16',
-    tint: '#93ccff',
-    icon: '#bfc7d2',
-    muted: '#bfc7d2',
-    border: 'rgba(255, 255, 255, 0.10)',
-    card: '#172033',
-    surface: '#1e293b',
-    surfaceContainer: '#1e293b',
-    surfaceContainerLow: '#172033',
-    surfaceContainerHigh: '#243044',
-    primaryContainer: '#007bb9',
-    onPrimaryContainer: '#fdfcff',
-    secondaryContainer: '#3f465c',
-    onSecondaryContainer: '#dae2fd',
-    tertiary: '#ffb875',
-    tertiaryContainer: '#ac6200',
-    onTertiaryContainer: '#fffbff',
-    skeleton: '#1e293b',
-    shadow: '#090d16',
-    overlay: 'rgba(9, 13, 22, 0.6)',
-    primary: '#93ccff',
-    onPrimary: '#001d31',
-    danger: '#ffb4ab',
-    success: '#93ccff',
-    tabIconDefault: '#bfc7d2',
-    tabIconSelected: '#93ccff',
+    text: '#F7F3F0',
+    background: '#110D0B',
+    tint: '#FF7A2E',
+    icon: '#ABA098',
+    muted: '#ABA098',
+    border: 'rgba(255, 255, 255, 0.07)',
+    card: '#1B1714',
+    surface: '#221D19',
+    surfaceContainer: '#221D19',
+    surfaceContainerLow: '#1B1714',
+    surfaceContainerHigh: '#2B2521',
+    brand: '#FF7A2E',
+    onBrand: '#1F0B00',
+    primaryContainer: '#4A1F08',
+    onPrimaryContainer: '#FFD2B5',
+    secondaryContainer: '#2B2521',
+    onSecondaryContainer: '#E6DDD7',
+    tertiary: '#5EEAD4',
+    tertiaryContainer: '#0F3B37',
+    onTertiaryContainer: '#B4F0E6',
+    skeleton: '#221D19',
+    shadow: '#000000',
+    overlay: 'rgba(0, 0, 0, 0.6)',
+    scrim: 'rgba(255, 255, 255, 0.04)',
+    primary: '#FF7A2E',
+    onPrimary: '#1F0B00',
+    danger: '#FF8A80',
+    dangerContainer: '#3A1715',
+    success: '#4ADE80',
+    tabIconDefault: '#ABA098',
+    tabIconSelected: '#FF7A2E',
   },
 };
 
 export type ThemeColorName = keyof typeof Colors.light;
-
-/** Stitch logo from the HTML mock (hotlink allowed). */
-export const SPLITEAT_LOGO_URI =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCwC3EE5Kef4anrdy3DAeLXfPyA2REiw79WqDglwM5jkI-nGWAeVgPNrzp7u7Fmj3gyt-v56prd5ORO7q83LN9gF8kiZ0sDTuVLNzoW8k_mtjjgM3tJSNIE0Ug4CNtL0-dMTG3CMoYRs7axhZ5_ofdtJqLS75liiLsdQ0ZHWlp53vEHX1epSIBFjyFyQIaw0Cf8OkIq8US1U3j8SaUuE3fy8UQvuHVue_a5fyNky-dTDmuiK_oOL1rZyA';

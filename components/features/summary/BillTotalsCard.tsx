@@ -4,6 +4,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Card } from '@/components/ui/Card';
 import { Spacing } from '@/constants/layout';
 import { useI18n } from '@/hooks/use-i18n';
+import { trackingFor } from '@/utils/rtl';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import type { BillCalculationResult } from '@/types';
 import { formatMoney } from '@/utils/formatMoney';
@@ -17,13 +18,13 @@ type BillTotalsCardProps = {
  * Stitch-style grand total hero card for the summary screen.
  */
 export function BillTotalsCard({ result, billName }: BillTotalsCardProps) {
-  const { t, locale } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const primary = useThemeColor({}, 'primary');
   const muted = useThemeColor({}, 'muted');
 
   return (
     <Card level={2} style={styles.hero}>
-      <Text style={[styles.kicker, { color: muted }]}>{t('summary.grandTotal')}</Text>
+      <Text style={[styles.kicker, { color: muted, letterSpacing: trackingFor(isRtl, 1) }]}>{t('summary.grandTotal')}</Text>
       <Text style={[styles.amount, { color: primary }]} numberOfLines={1}>
         {formatMoney(result.grandTotal, locale)}
       </Text>
@@ -40,12 +41,11 @@ export function BillTotalsCard({ result, billName }: BillTotalsCardProps) {
 const styles = StyleSheet.create({
   hero: {
     alignItems: 'center',
-    paddingVertical: Spacing.xl,
+    paddingVertical: Spacing.lg,
   },
   kicker: {
     fontSize: 12,
     fontWeight: '600',
-    letterSpacing: 1,
     textTransform: 'uppercase',
     marginBottom: Spacing.xs,
   },

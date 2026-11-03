@@ -27,12 +27,12 @@ export function PersonListRow({ person, onEdit, onDelete }: PersonListRowProps) 
       </Text>
       <View style={styles.actions}>
         <SecondaryButton
-          label={t('common.edit')}
+          label={t('common.edit')} icon="edit"
           onPress={() => onEdit(person)}
           style={styles.flex}
         />
         <SecondaryButton
-          label={t('common.delete')}
+          label={t('common.delete')} icon="delete-outline"
           tone="danger"
           onPress={() => onDelete(person.id)}
           style={styles.flex}

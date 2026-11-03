@@ -1,6 +1,6 @@
 # Bill-Splitting
 
-SplitEat — an Expo (React Native) app that splits restaurant bills fairly by what each person ordered.
+Kolwa7ed (كل واحد) — an Expo (React Native) app that splits restaurant bills fairly by what each person ordered.
 
 ## Features
 

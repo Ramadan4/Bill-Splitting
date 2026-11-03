@@ -7,7 +7,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { depth, PRESS_SCALE, Radius, Spacing, TOUCH_TARGET } from '@/constants/layout';
+import { depth, Radius, Spacing, TOUCH_TARGET } from '@/constants/layout';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
@@ -19,7 +19,7 @@ type PressableCardProps = {
 };
 
 /**
- * Tappable bento tile: same surface treatment as `Card` plus press feedback.
+ * Tappable card: same surface as `Card`, plus a tint + gentle squeeze on press.
  * Used for navigation tiles and selectable options.
  */
 export function PressableCard({
@@ -30,6 +30,7 @@ export function PressableCard({
 }: PressableCardProps) {
   const borderColor = useThemeColor({}, 'border');
   const cardColor = useThemeColor({}, 'card');
+  const pressedColor = useThemeColor({}, 'surfaceContainerLow');
   const shadowColor = useThemeColor({}, 'shadow');
   const { trigger } = useHaptics();
 
@@ -45,9 +46,10 @@ export function PressableCard({
       onPress={handlePress}
       style={(state) => [
         styles.card,
-        { borderColor, backgroundColor: cardColor },
+        { borderColor, backgroundColor: state.pressed ? pressedColor : cardColor },
         depth(1, shadowColor),
-        { transform: [{ scale: state.pressed ? PRESS_SCALE : 1 }] },
+        // Gentler squeeze than buttons: large cards shrinking 4% feels jumpy.
+        { transform: [{ scale: state.pressed ? 0.98 : 1 }] },
         style,
       ]}>
       {children}
@@ -58,8 +60,8 @@ export function PressableCard({
 const styles = StyleSheet.create({
   card: {
     minHeight: TOUCH_TARGET,
-    borderWidth: 1,
-    borderRadius: Radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: Radius.xl,
     padding: Spacing.lg,
     gap: Spacing.xs,
     justifyContent: 'center',

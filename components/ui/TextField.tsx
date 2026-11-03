@@ -30,7 +30,7 @@ export function TextField({ label, error, style, keyboardType, ...rest }: TextFi
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'muted');
   const borderColor = useThemeColor({}, 'border');
-  const cardColor = useThemeColor({}, 'card');
+  const fillColor = useThemeColor({}, 'surfaceContainerLow');
   const errorColor = useThemeColor({}, 'danger');
   const usesNumberPad = keyboardType != null && NUMBER_PADS.has(keyboardType);
 
@@ -55,7 +55,7 @@ export function TextField({ label, error, style, keyboardType, ...rest }: TextFi
           {
             color: textColor,
             borderColor: error ? errorColor : borderColor,
-            backgroundColor: cardColor,
+            backgroundColor: fillColor,
           },
           style,
         ]}
@@ -74,11 +74,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   input: {
-    minHeight: TOUCH_TARGET,
-    borderWidth: 1,
+    minHeight: TOUCH_TARGET + 2,
+    borderWidth: StyleSheet.hairlineWidth,
     borderRadius: Radius.md,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md + 2,
+    paddingVertical: Spacing.sm + 2,
     fontSize: 16,
   },
   error: {

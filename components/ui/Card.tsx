@@ -12,7 +12,8 @@ type CardProps = {
 };
 
 /**
- * Bento-grid surface: soft dynamic border, generous padding, depth elevation.
+ * Floating surface: large radius, soft warm shadow, hairline border (the
+ * border is what keeps cards visible in dark mode, where shadows disappear).
  * Atomic and stateless — feature layouts compose these into grids.
  */
 export function Card({ children, level = 1, style }: CardProps) {
@@ -36,8 +37,8 @@ export function Card({ children, level = 1, style }: CardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    borderWidth: 1,
-    borderRadius: Radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: Radius.xl,
     padding: Spacing.lg,
     gap: Spacing.sm,
   },

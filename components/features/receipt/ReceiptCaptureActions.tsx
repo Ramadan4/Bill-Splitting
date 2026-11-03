@@ -30,17 +30,18 @@ export function ReceiptCaptureActions({
     <View style={styles.wrap}>
       <PrimaryButton
         label={isBusy ? t('common.opening') : t('receipt.takePhoto')}
+        icon="photo-camera"
         onPress={onTakePhoto}
         disabled={isBusy}
       />
       <SecondaryButton
-        label={t('receipt.chooseGallery')}
+        label={t('receipt.chooseGallery')} icon="photo-library"
         onPress={onChooseLibrary}
         disabled={isBusy}
       />
       {hasPhoto ? (
         <SecondaryButton
-          label={t('receipt.removePhoto')}
+          label={t('receipt.removePhoto')} icon="delete-outline"
           tone="danger"
           onPress={onClear}
           disabled={isBusy}

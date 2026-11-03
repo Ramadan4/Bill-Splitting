@@ -58,7 +58,7 @@ export function SummaryBody({ title, description, result, footer }: SummaryBodyP
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '600',
     textAlign: 'center',
   },

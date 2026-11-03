@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'dashed',
     borderRadius: Radius.lg,
-    padding: Spacing.xl,
+    padding: Spacing.lg,
     gap: Spacing.xs,
     alignItems: 'center',
   },

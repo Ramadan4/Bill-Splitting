@@ -49,7 +49,7 @@ export function HistoryRow({ bill, onOpen, onDelete }: HistoryRowProps) {
       </Pressable>
       <View style={styles.actions}>
         <SecondaryButton
-          label={t('common.delete')}
+          label={t('common.delete')} icon="delete-outline"
           tone="danger"
           onPress={() => onDelete(bill.id)}
           style={styles.flex}

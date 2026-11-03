@@ -78,7 +78,7 @@ export function ChargesForm({ values, error, onChange, onContinue }: ChargesForm
       ) : null}
 
       <ErrorBanner message={error} />
-      <PrimaryButton label={t('charges.calculate')} onPress={onContinue} />
+      <PrimaryButton label={t('charges.calculate')} icon="calculate" onPress={onContinue} />
     </View>
   );
 }

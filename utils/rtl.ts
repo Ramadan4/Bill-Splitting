@@ -33,3 +33,23 @@ export function syncLayoutDirection(locale: AppLocale): void {
   I18nManager.allowRTL(true);
   I18nManager.forceRTL(shouldBeRtl);
 }
+
+/**
+ * Whether the native layout flag disagrees with the chosen locale.
+ * Native headers/back gestures only pick up `forceRTL` after a cold start,
+ * so the UI can surface a restart hint while this returns true.
+ */
+export function nativeDirectionMismatch(locale: AppLocale): boolean {
+  if (Platform.OS === 'web') {
+    return false;
+  }
+  return I18nManager.isRTL !== localeNeedsRtl(locale);
+}
+
+/**
+ * Letter-spacing that is safe for the active script.
+ * Arabic is cursive: extra tracking breaks the joins between letters, so RTL gets 0.
+ */
+export function trackingFor(isRtl: boolean, value: number): number {
+  return isRtl ? 0 : value;
+}

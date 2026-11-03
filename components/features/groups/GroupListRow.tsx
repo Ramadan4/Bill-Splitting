@@ -33,12 +33,12 @@ export function GroupListRow({ group, onEdit, onDelete }: GroupListRowProps) {
       </Text>
       <View style={styles.actions}>
         <SecondaryButton
-          label={t('common.edit')}
+          label={t('common.edit')} icon="edit"
           onPress={() => onEdit(group)}
           style={styles.flex}
         />
         <SecondaryButton
-          label={t('common.delete')}
+          label={t('common.delete')} icon="delete-outline"
           tone="danger"
           onPress={() => onDelete(group.id)}
           style={styles.flex}

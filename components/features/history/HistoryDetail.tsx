@@ -47,12 +47,12 @@ export function HistoryDetail() {
           <ActionDock>
             <ErrorBanner message={shareError ? t(shareError) : null} />
             <SecondaryButton
-              label={t('summary.shareWhatsApp')}
+              label={t('summary.shareWhatsApp')} icon="share"
               disabled={isSharing}
               onPress={() => void shareBill(bill, result)}
             />
             <SecondaryButton
-              label={t('history.deleteBill')}
+              label={t('history.deleteBill')} icon="delete-outline"
               tone="danger"
               onPress={() => setConfirmDelete(true)}
             />
@@ -78,7 +78,7 @@ export function HistoryDetail() {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
   },
   description: {

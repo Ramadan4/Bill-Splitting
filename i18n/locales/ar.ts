@@ -1,11 +1,12 @@
 /**
- * Arabic UI copy for SplitEat (RTL).
+ * Arabic UI copy for Kolwa7ed (RTL).
  * Keep keys in sync with `en.ts`.
  */
 import type { TranslationCatalog } from '@/i18n/locales/en';
 
 export const ar: TranslationCatalog = {
   common: {
+    back: 'رجوع',
     next: 'التالي',
     continue: 'متابعة',
     cancel: 'إلغاء',
@@ -20,13 +21,20 @@ export const ar: TranslationCatalog = {
     confirmDeleteBill: 'ستُحذف هذه الفاتورة من السجل.',
   },
   home: {
-    brand: 'SplitEat',
+    brand: 'كل واحد',
     subtitle: 'قسّم الفاتورة بعدل',
     createBill: 'إنشاء فاتورة جديدة',
     history: 'سجل الفواتير',
     groups: 'مجموعات الأصدقاء',
+    heroTitle: 'قسّم الفاتورة في ثوانٍ',
+    heroBody: 'صوّر الإيصال وحدّد من طلب ماذا — والضريبة والخدمة نحسبها عنك.',
+    historyHint: 'فواتيرك السابقة',
+    groupsHint: 'أصدقاؤك المحفوظون',
+    quickActions: 'إجراءات سريعة',
   },
   settings: {
+    title: 'الإعدادات',
+    done: 'تم',
     language: 'اللغة',
     theme: 'المظهر',
     english: 'English',
@@ -38,7 +46,7 @@ export const ar: TranslationCatalog = {
       'اتجاه الواجهة يُطبَّق داخل التطبيق. أعد تشغيل التطبيق بالكامل إذا بقي شريط النظام معكوساً.',
   },
   nav: {
-    home: 'SplitEat',
+    home: 'كل واحد',
     create: 'فاتورة جديدة',
     inputMethod: 'طريقة الإدخال',
     receipt: 'صورة الإيصال',
@@ -51,6 +59,7 @@ export const ar: TranslationCatalog = {
     groups: 'المجموعات',
     split: 'تقسيم',
     profile: 'الملف',
+    settings: 'الإعدادات',
   },
   create: {
     title: 'إنشاء فاتورة جديدة',

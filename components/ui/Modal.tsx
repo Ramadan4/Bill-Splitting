@@ -2,6 +2,7 @@ import { Modal as RNModal, Pressable, StyleSheet, Text, View } from 'react-nativ
 
 import { Button } from '@/components/ui/Button';
 import { Radius, Spacing, TOUCH_TARGET } from '@/constants/layout';
+import { useI18n } from '@/hooks/use-i18n';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 type ModalProps = {
@@ -30,6 +31,7 @@ export function Modal({
   onConfirm,
   onCancel,
 }: ModalProps) {
+  const { isRtl } = useI18n();
   const overlay = useThemeColor({}, 'overlay');
   const cardColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
@@ -42,7 +44,8 @@ export function Modal({
         accessibilityRole="button"
         accessibilityLabel={cancelLabel}
         onPress={onCancel}
-        style={[styles.overlay, { backgroundColor: overlay }]}>
+        // RN Modal is a separate native window and ignores the root `direction`, so set it here.
+        style={[styles.overlay, { backgroundColor: overlay, direction: isRtl ? 'rtl' : 'ltr' }]}>
         <Pressable
           onPress={(event) => event.stopPropagation()}
           style={[styles.sheet, { backgroundColor: cardColor, borderColor }]}>
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'center',
-    padding: Spacing.xl,
+    padding: Spacing.lg,
   },
   sheet: {
     minHeight: TOUCH_TARGET,

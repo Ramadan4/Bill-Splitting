@@ -61,7 +61,7 @@ export function GroupForm({
             onSubmitEditing={onAddMember}
           />
         </View>
-        <SecondaryButton label={t('groups.addMember')} onPress={onAddMember} />
+        <SecondaryButton label={t('groups.addMember')} icon="person-add-alt" onPress={onAddMember} />
       </View>
       {members.length > 0 ? (
         <View style={styles.chips}>

@@ -2,12 +2,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { CTA_HEIGHT, PRESS_SCALE, Radius, Spacing } from '@/constants/layout';
+import { depth, Radius, Spacing, TOUCH_TARGET } from '@/constants/layout';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useI18n } from '@/hooks/use-i18n';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
-export type HomeTab = 'history' | 'split' | 'groups' | 'profile';
+export type HomeTab = 'history' | 'split' | 'groups' | 'settings';
 
 type HomeBottomNavProps = {
   active: HomeTab;
@@ -15,96 +15,107 @@ type HomeBottomNavProps = {
 };
 
 const TABS: { id: HomeTab; icon: keyof typeof MaterialIcons.glyphMap; labelKey: string }[] = [
+  { id: 'split', icon: 'receipt-long', labelKey: 'nav.split' },
   { id: 'history', icon: 'history', labelKey: 'nav.history' },
-  { id: 'split', icon: 'receipt', labelKey: 'nav.split' },
   { id: 'groups', icon: 'group', labelKey: 'nav.groups' },
-  { id: 'profile', icon: 'person', labelKey: 'nav.profile' },
+  { id: 'settings', icon: 'settings', labelKey: 'nav.settings' },
 ];
 
 /**
- * Stitch bottom nav — Split tab is the elevated primary chip.
+ * Floating pill nav (2026 style): a rounded bar hovering above the content,
+ * with a tinted pill behind the active tab's icon.
+ * Labels are sentence-case with no tracking — uppercase/letter-spacing has no
+ * meaning in Arabic and breaks its cursive letter joins.
  */
 export function HomeBottomNav({ active, onSelect }: HomeBottomNavProps) {
   const insets = useSafeAreaInsets();
   const { t } = useI18n();
   const { trigger } = useHaptics();
   const muted = useThemeColor({}, 'muted');
-  const surface = useThemeColor({}, 'surfaceContainer');
+  const textColor = useThemeColor({}, 'text');
+  const surface = useThemeColor({}, 'card');
   const border = useThemeColor({}, 'border');
-  const primaryContainer = useThemeColor({}, 'primaryContainer');
-  const onPrimaryContainer = useThemeColor({}, 'onPrimaryContainer');
+  const shadow = useThemeColor({}, 'shadow');
+  const indicator = useThemeColor({}, 'primaryContainer');
+  const onIndicator = useThemeColor({}, 'onPrimaryContainer');
 
   return (
-    <View
-      style={[
-        styles.nav,
-        {
-          backgroundColor: surface,
-          borderTopColor: border,
-          paddingBottom: Math.max(insets.bottom, Spacing.sm),
-        },
-      ]}>
-      {TABS.map((tab) => {
-        const selected = tab.id === active;
-        return (
-          <Pressable
-            key={tab.id}
-            accessibilityRole="button"
-            accessibilityState={{ selected }}
-            onPress={() => {
-              trigger('light');
-              onSelect(tab.id);
-            }}
-            style={({ pressed }) => [
-              styles.item,
-              selected && { backgroundColor: primaryContainer },
-              { transform: [{ scale: pressed ? PRESS_SCALE : 1 }] },
-            ]}>
-            <MaterialIcons
-              name={tab.icon}
-              size={22}
-              color={selected ? onPrimaryContainer : muted}
-            />
-            <Text
-              style={[
-                styles.label,
-                { color: selected ? onPrimaryContainer : muted },
-              ]}
-              numberOfLines={1}>
-              {t(tab.labelKey)}
-            </Text>
-          </Pressable>
-        );
-      })}
+    // Outer view reserves the home-indicator inset; inner bar floats above it.
+    <View style={[styles.wrap, { paddingBottom: Math.max(insets.bottom, Spacing.md) }]}>
+      <View
+        style={[styles.nav, { backgroundColor: surface, borderColor: border }, depth(2, shadow)]}>
+        {TABS.map((tab) => {
+          const selected = tab.id === active;
+          return (
+            <Pressable
+              key={tab.id}
+              accessibilityRole="tab"
+              accessibilityState={{ selected }}
+              accessibilityLabel={t(tab.labelKey)}
+              onPress={() => {
+                trigger('light');
+                onSelect(tab.id);
+              }}
+              style={styles.item}>
+              {({ pressed }) => (
+                <>
+                  <View
+                    style={[
+                      styles.indicator,
+                      selected && { backgroundColor: indicator },
+                      { transform: [{ scale: pressed ? 0.92 : 1 }] },
+                    ]}>
+                    <MaterialIcons
+                      name={tab.icon}
+                      size={22}
+                      color={selected ? onIndicator : muted}
+                    />
+                  </View>
+                  <Text
+                    style={[
+                      styles.label,
+                      { color: selected ? textColor : muted, fontWeight: selected ? '700' : '500' },
+                    ]}
+                    numberOfLines={1}>
+                    {t(tab.labelKey)}
+                  </Text>
+                </>
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrap: {
+    paddingHorizontal: Spacing.container,
+    paddingTop: Spacing.xs,
+  },
   nav: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingTop: Spacing.sm,
-    paddingHorizontal: Spacing.sm,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopLeftRadius: Radius.lg,
-    borderTopRightRadius: Radius.lg,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.xs,
+    borderRadius: Radius.xl + 4,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   item: {
-    minHeight: CTA_HEIGHT - 8,
-    minWidth: 72,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: Radius.lg,
+    flex: 1,
+    minHeight: TOUCH_TARGET,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 2,
+    gap: Spacing.xs,
+  },
+  indicator: {
+    width: 56,
+    height: 30,
+    borderRadius: Radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   label: {
-    fontSize: 11,
-    fontWeight: '600',
-    letterSpacing: 0.4,
-    textTransform: 'uppercase',
+    fontSize: 12,
   },
 });

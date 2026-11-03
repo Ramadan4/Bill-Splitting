@@ -39,12 +39,12 @@ export function ItemListRow({ item, onEdit, onDelete }: ItemListRowProps) {
       </View>
       <View style={styles.actions}>
         <SecondaryButton
-          label={t('common.edit')}
+          label={t('common.edit')} icon="edit"
           onPress={() => onEdit(item)}
           style={styles.flex}
         />
         <SecondaryButton
-          label={t('common.delete')}
+          label={t('common.delete')} icon="delete-outline"
           tone="danger"
           onPress={() => onDelete(item.id)}
           style={styles.flex}

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "SplitEat",
+    "name": "Kolwa7ed",
     "slug": "spliteat",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -49,14 +49,15 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow SplitEat to access your photos so you can scan a receipt and extract items.",
-          "cameraPermission": "Allow SplitEat to use the camera so you can photograph a restaurant receipt for item extraction.",
+          "photosPermission": "Allow Kolwa7ed to access your photos so you can scan a receipt and extract items.",
+          "cameraPermission": "Allow Kolwa7ed to use the camera so you can photograph a restaurant receipt for item extraction.",
           "microphonePermission": false
         }
       ],
       [
         "expo-localization",
         {
+          "supportsRTL": true,
           "supportedLocales": {
             "ios": [
               "en",

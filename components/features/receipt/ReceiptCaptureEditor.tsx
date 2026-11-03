@@ -10,6 +10,7 @@ import { CTA_HEIGHT, PRESS_SCALE, Radius, Spacing, depth } from '@/constants/lay
 import { useReceiptCapture } from '@/hooks/receipt/useReceiptCapture';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useI18n } from '@/hooks/use-i18n';
+import { trackingFor } from '@/utils/rtl';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 /**
@@ -27,7 +28,7 @@ export function ReceiptCaptureEditor() {
     continueToItems,
   } = useReceiptCapture();
 
-  const { t } = useI18n();
+  const { t, isRtl } = useI18n();
   const { trigger } = useHaptics();
   const titleColor = useThemeColor({}, 'text');
   const muted = useThemeColor({}, 'muted');
@@ -47,7 +48,7 @@ export function ReceiptCaptureEditor() {
 
         <View style={[styles.hintPill, { backgroundColor: surfaceContainer }]}>
           <MaterialIcons name="crop-free" size={16} color={primary} />
-          <Text style={[styles.hintText, { color: muted }]} numberOfLines={1}>
+          <Text style={[styles.hintText, { color: muted, letterSpacing: trackingFor(isRtl, 0.4) }]} numberOfLines={1}>
             {t('receipt.positionHint')}
           </Text>
         </View>
@@ -125,7 +126,7 @@ export function ReceiptCaptureEditor() {
 
         {hasPhoto ? (
           <SecondaryButton
-            label={t('receipt.removePhoto')}
+            label={t('receipt.removePhoto')} icon="delete-outline"
             tone="danger"
             onPress={clearPhoto}
             disabled={isBusy}
@@ -219,7 +220,6 @@ const styles = StyleSheet.create({
   hintText: {
     fontSize: 12,
     fontWeight: '600',
-    letterSpacing: 0.4,
   },
   viewport: {
     height: 320,
